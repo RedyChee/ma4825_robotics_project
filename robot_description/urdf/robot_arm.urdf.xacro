@@ -1,0 +1,342 @@
+<?xml version="1.0"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-1-g15f4949  Build Version: 1.6.7594.29634
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="robot_description">
+  <link name="world_link"/>
+	<joint name="world_to_base_link=" type="fixed">
+		<parent link="world_link"/>
+		<child link="base_link"/>
+		<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+	</joint>
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.0621296478375181 -0.000197013108213795 0.0262458650036732"
+        rpy="0 0 0" />
+      <mass
+        value="1.57548174222026" />
+      <inertia
+        ixx="0.00228921323959943"
+        ixy="-1.89613899616039E-07"
+        ixz="-0.000914717756802455"
+        iyy="0.0111783484880427"
+        iyz="-9.2809474418948E-08"
+        izz="0.0126774912847455" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_description/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_description/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="shoulder_link">
+    <inertial>
+      <origin
+        xyz="0.000282603902543394 1.4450519914555E-05 0.0112110401977208"
+        rpy="0 0 0" />
+      <mass
+        value="0.12558913401628" />
+      <inertia
+        ixx="0.00012714430786896"
+        ixy="-9.26769562101175E-08"
+        ixz="5.79420669611089E-15"
+        iyy="0.000128437631153157"
+        iyz="1.78900511672799E-07"
+        izz="0.000252635335314004" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_description/meshes/shoulder_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.894117647058823 0.913725490196078 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_description/meshes/shoulder_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="shoulder_joint"
+    type="revolute">
+    <origin
+      xyz="0 0 0.0905"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="shoulder_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="bicep_link">
+    <inertial>
+      <origin
+        xyz="-1.07645718033789E-09 0.00254632887372425 0.0671287671446333"
+        rpy="0 0 0" />
+      <mass
+        value="0.0228631437999218" />
+      <inertia
+        ixx="2.39073149613631E-05"
+        ixy="2.32866188798943E-13"
+        ixz="1.28584630823363E-13"
+        iyy="1.31818096379651E-05"
+        iyz="9.63935421983949E-14"
+        izz="1.29556718766971E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_description/meshes/bicep_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.666666666666667 0.698039215686274 0.768627450980392 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_description/meshes/bicep_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="bicep_joint"
+    type="revolute">
+    <origin
+      xyz="0.011637 0.00030135 0.0232"
+      rpy="0 0 0" />
+    <parent
+      link="shoulder_link" />
+    <child
+      link="bicep_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="elbow_link">
+    <inertial>
+      <origin
+        xyz="-0.00185354151846307 -0.000935407374372033 0.0102619236268259"
+        rpy="0 0 0" />
+      <mass
+        value="0.0548714607838969" />
+      <inertia
+        ixx="1.35412600787717E-05"
+        ixy="1.68915939744942E-07"
+        ixz="-2.0546607991405E-08"
+        iyy="8.87257685617499E-06"
+        iyz="-8.96949891636737E-08"
+        izz="8.07530038782249E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_description/meshes/elbow_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.666666666666667 0.698039215686274 0.768627450980392 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_description/meshes/elbow_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="elbow_joint"
+    type="revolute">
+    <origin
+      xyz="0 0 0.135"
+      rpy="0 0 0" />
+    <parent
+      link="bicep_link" />
+    <child
+      link="elbow_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="wrist_link">
+    <inertial>
+      <origin
+        xyz="-0.0111728492586354 0.000213470256162307 0.0328080864661115"
+        rpy="0 0 0" />
+      <mass
+        value="0.0213298068466067" />
+      <inertia
+        ixx="4.9862041650459E-06"
+        ixy="-1.53974867569433E-08"
+        ixz="-5.67433972499736E-10"
+        iyy="3.56035249002068E-06"
+        iyz="-6.51916422698549E-08"
+        izz="2.64447158880968E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_description/meshes/wrist_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.666666666666667 0.698039215686274 0.768627450980392 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_description/meshes/wrist_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wrist_joint"
+    type="revolute">
+    <origin
+      xyz="-0.0030616 -0.0095697 0.078229"
+      rpy="0 0 0" />
+    <parent
+      link="elbow_link" />
+    <child
+      link="wrist_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="gripper_link">
+    <inertial>
+      <origin
+        xyz="0.00954294356986981 -0.00611642852719452 0.0356867465755666"
+        rpy="0 0 0" />
+      <mass
+        value="0.0157257026135101" />
+      <inertia
+        ixx="3.01166364498107E-06"
+        ixy="6.51880008726437E-14"
+        ixz="-8.68149260091815E-14"
+        iyy="2.18730333135934E-06"
+        iyz="-5.76035894901589E-09"
+        izz="9.13362042953376E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_description/meshes/gripper_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.317647058823529 0.247058823529412 0.207843137254902 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_description/meshes/gripper_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="gripper_joint"
+    type="revolute">
+    <origin
+      xyz="-0.0086342 0.0075951 0.02978"
+      rpy="0 0 -0.008706" />
+    <parent
+      link="wrist_link" />
+    <child
+      link="gripper_link" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+</robot>

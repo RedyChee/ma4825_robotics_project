@@ -1,0 +1,157 @@
+<?xml version="1.0"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-1-g15f4949  Build Version: 1.6.7594.29634
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="logitech_c270_assemblyy">
+  <link name="world_link"/>
+	<joint name="world_to_base_link=" type="fixed">
+		<parent link="world_link"/>
+		<child link="base_link"/>
+		<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+	</joint>
+  <link name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.016279 0.023335 -0.02712"
+        rpy="0 0 0" />
+      <mass
+        value="0.0097431" />
+      <inertia
+        ixx="1.3645E-06"
+        ixy="4.2835E-07"
+        ixz="-2.9609E-07"
+        iyy="1.4844E-06"
+        iyz="-2.425E-07"
+        izz="1.4134E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://logitech_c270_assembly/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.29412 0.29412 0.29412 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://logitech_c270_assembly/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="link1">
+    <inertial>
+      <origin
+        xyz="-0.00091504 -0.0020508 0.014124"
+        rpy="0 0 0" />
+      <mass
+        value="0.0079195" />
+      <inertia
+        ixx="1.3076E-06"
+        ixy="-1.1299E-09"
+        ixz="-1.6351E-08"
+        iyy="2.0373E-06"
+        iyz="4.1864E-08"
+        izz="8.6008E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://logitech_c270_assembly/meshes/link1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.29412 0.29412 0.29412 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://logitech_c270_assembly/meshes/link1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint1"
+    type="fixed">
+    <origin
+      xyz="0.006804 0.024772 0.012268"
+      rpy="-0.92026 0.55846 1.7324" />
+    <parent
+      link="base_link" />
+    <child
+      link="link1" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="camera">
+    <inertial>
+      <origin
+        xyz="0.01676 0.00026642 -0.0075542"
+        rpy="0 0 0" />
+      <mass
+        value="0.027972" />
+      <inertia
+        ixx="2.205E-06"
+        ixy="-3.8368E-09"
+        ixz="-3.3974E-08"
+        iyy="9.1182E-06"
+        iyz="1.5946E-08"
+        izz="1.0002E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://logitech_c270_assembly/meshes/camera.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.29412 0.29412 0.29412 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://logitech_c270_assembly/meshes/camera.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint2"
+    type="fixed">
+    <origin
+      xyz="0.027468 0.011808 0.0076181"
+      rpy="2.1581 0.55846 1.7324" />
+    <parent
+      link="base_link" />
+    <child
+      link="camera" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+</robot>
