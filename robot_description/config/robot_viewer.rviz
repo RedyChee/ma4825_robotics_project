@@ -6,6 +6,7 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /TF1
       Splitter Ratio: 0.5
     Tree Height: 549
   - Class: rviz/Selection
@@ -102,6 +103,42 @@ Visualization Manager:
       Update Interval: 0
       Value: true
       Visual Enabled: true
+    - Class: rviz/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+        base_link:
+          Value: true
+        bicep_link:
+          Value: true
+        elbow_link:
+          Value: true
+        gripper_link:
+          Value: true
+        shoulder_link:
+          Value: true
+        world_link:
+          Value: true
+        wrist_link:
+          Value: true
+      Marker Alpha: 1
+      Marker Scale: 0.25
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        world_link:
+          base_link:
+            shoulder_link:
+              bicep_link:
+                elbow_link:
+                  wrist_link:
+                    gripper_link:
+                      {}
+      Update Interval: 0
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
