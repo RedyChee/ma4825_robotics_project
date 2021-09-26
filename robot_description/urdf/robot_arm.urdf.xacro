@@ -3,6 +3,7 @@
      Commit Version: 1.6.0-1-g15f4949  Build Version: 1.6.7594.29634
      For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="robot_description">
+  <xacro:include filename="$(find gripper_description)/urdf/gripper.urdf.xacro" />
   <link name="world_link"/>
 	<joint name="world_to_base_link=" type="fixed">
 		<parent link="world_link"/>
@@ -223,7 +224,7 @@
       effort="0"
       velocity="0" />
   </joint>
-  <link
+  <!-- <link
     name="wrist_link">
     <inertial>
       <origin
@@ -262,7 +263,7 @@
           filename="package://robot_description/meshes/wrist_link.STL" />
       </geometry>
     </collision>
-  </link>
+  </link> -->
   <joint
     name="wrist_joint"
     type="revolute">
@@ -272,7 +273,7 @@
     <parent
       link="elbow_link" />
     <child
-      link="wrist_link" />
+      link="gripper_base_link" />
     <axis
       xyz="0 0 1" />
     <limit
@@ -281,7 +282,7 @@
       effort="0"
       velocity="0" />
   </joint>
-  <link
+  <!-- <link
     name="gripper_link">
     <inertial>
       <origin
@@ -320,8 +321,8 @@
           filename="package://robot_description/meshes/gripper_link.STL" />
       </geometry>
     </collision>
-  </link>
-  <joint
+  </link> -->
+  <!-- <joint
     name="gripper_joint"
     type="revolute">
     <origin
@@ -338,5 +339,5 @@
       upper="2.618"
       effort="0"
       velocity="0" />
-  </joint>
+  </joint> -->
 </robot>
