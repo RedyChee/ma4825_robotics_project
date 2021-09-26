@@ -4,7 +4,7 @@
     name="model" />
   <param
     name="robot_description"
-    textfile="$(find robot_description)/urdf/robot_arm.urdf.xacro" />
+    command ="$(find xacro)/xacro --inorder $(find robot_description)/urdf/robot_arm.urdf.xacro" />
   <node
     name="joint_state_publisher_gui"
     pkg="joint_state_publisher_gui"
@@ -17,5 +17,5 @@
     name="rviz"
     pkg="rviz"
     type="rviz"
-    args="-d $(find robot_description)/urdf.rviz" />
+    args="-d $(find robot_description)/config/robot_viewer.rviz" />
 </launch>
