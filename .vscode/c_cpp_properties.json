@@ -1,0 +1,19 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "",
+        "limitSymbolsToIncludedHeaders": true
+      },
+      "includePath": [
+        "/home/jcchia/catkin_ws/devel/include/**",
+        "/opt/ros/noetic/include/**",
+        "/home/jcchia/catkin_ws/src/flexa-robot/flexa_system/device_handler/include/**",
+        "/home/jcchia/catkin_ws/src/flexa-robot/flexa_system/diagnostics_manager/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS"
+    }
+  ],
+  "version": 4
+}
