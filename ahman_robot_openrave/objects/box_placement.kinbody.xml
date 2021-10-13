@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<kinbody name="box_placement">
+  <body name="mesh">
+    <geom type="trimesh">
+      <data>meshes/Box_Placement.STL 0.001</data>
+    </geom>
+  </body>
+</kinbody>

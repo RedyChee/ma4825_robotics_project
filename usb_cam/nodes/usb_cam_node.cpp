@@ -89,7 +89,7 @@ public:
     image_pub_ = it.advertiseCamera("image_raw", 1);
 
     // grab the parameters
-    node_.param("video_device", video_device_name_, std::string("/dev/video0"));
+    node_.param("video_device", video_device_name_, std::string("/dev/video4"));
     node_.param("brightness", brightness_, -1); //0-255, -1 "leave alone"
     node_.param("contrast", contrast_, -1); //0-255, -1 "leave alone"
     node_.param("saturation", saturation_, -1); //0-255, -1 "leave alone"

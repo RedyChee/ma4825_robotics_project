@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-1-g15f4949  Build Version: 1.6.7594.29634
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="ahman_robot">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="4.03515664332277E-06 0.00156731385501752 0.0194386010664612"
+        rpy="0 0 0" />
+      <mass
+        value="0.341700717762722" />
+      <inertia
+        ixx="0.000988663190405644"
+        ixy="-1.04160274271504E-08"
+        ixz="-1.46302809934933E-09"
+        iyy="0.000983473535631327"
+        iyz="-2.20301206814554E-07"
+        izz="0.00175721561725007" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ahman_robot_description/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ahman_robot_description/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="shoulder_lnik">
+    <inertial>
+      <origin
+        xyz="0.000101238677035154 -0.000114305022123146 0.0495521735599035"
+        rpy="0 0 0" />
+      <mass
+        value="0.230749674146513" />
+      <inertia
+        ixx="0.000462188953983829"
+        ixy="-1.46726651813318E-09"
+        ixz="-1.04430975449333E-08"
+        iyy="0.000456255559294962"
+        iyz="-1.90943812456882E-07"
+        izz="0.000797285270507836" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ahman_robot_description/meshes/shoulder_lnik.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ahman_robot_description/meshes/shoulder_lnik.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="shoulder_joint"
+    type="revolute">
+    <origin
+      xyz="0 0 0.045"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="shoulder_lnik" />
+    <axis
+      xyz="0 0 -1" />
+		<limit
+      lower="-2.2689280275926285"
+      upper="2.2689280275926285"
+      effort="0"
+      velocity="0" />  
+  </joint>
+  <link
+    name="elbow_link">
+    <inertial>
+      <origin
+        xyz="6.68706254368101E-05 0.0205389315072919 0.132700787352869"
+        rpy="0 0 0" />
+      <mass
+        value="0.096262640443939" />
+      <inertia
+        ixx="7.6702370653249E-05"
+        ixy="-1.45413248580412E-09"
+        ixz="-9.030856196559E-08"
+        iyy="7.24501645017268E-05"
+        iyz="-1.90966118088874E-07"
+        izz="1.90081952297504E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ahman_robot_description/meshes/elbow_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ahman_robot_description/meshes/elbow_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="elbow_joint"
+    type="revolute">
+    <origin
+      xyz="0.00034037 -0.021063 0.2115"
+      rpy="0 0 0" />
+    <parent
+      link="shoulder_lnik" />
+    <child
+      link="elbow_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="0"
+      upper="1.5707963267948966"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="wrist_link">
+    <inertial>
+      <origin
+        xyz="0.000241253995371227 0.0205903281834586 0.0675596012185864"
+        rpy="0 0 0" />
+      <mass
+        value="0.0582938416196411" />
+      <inertia
+        ixx="1.93982453388511E-05"
+        ixy="1.47192371761609E-09"
+        ixz="2.70708158228733E-07"
+        iyy="1.72343098370362E-05"
+        iyz="-1.05212597232834E-08"
+        izz="1.29425910830237E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ahman_robot_description/meshes/wrist_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ahman_robot_description/meshes/wrist_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wrist_joint"
+    type="revolute">
+    <origin
+      xyz="0 0 0.2032"
+      rpy="0 0 0" />
+    <parent
+      link="elbow_link" />
+    <child
+      link="wrist_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="0"
+      upper="1.5707963267948966"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="knuckle_link">
+    <inertial>
+      <origin
+        xyz="0.0235984795025687 0.000742750048917579 0.0180124642206413"
+        rpy="0 0 0" />
+      <mass
+        value="0.070331938721002" />
+      <inertia
+        ixx="2.52473213768789E-05"
+        ixy="6.19115593070956E-08"
+        ixz="7.62601432924068E-07"
+        iyy="1.93683930570014E-05"
+        iyz="1.8098195926761E-07"
+        izz="2.54377352659079E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ahman_robot_description/meshes/knuckle_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ahman_robot_description/meshes/knuckle_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="knuckle_joint"
+    type="revolute">
+    <origin
+      xyz="0.021 0.021 0.0952"
+      rpy="0 0 0" />
+    <parent
+      link="wrist_link" />
+    <child
+      link="knuckle_link" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="-2.2689280275926285"
+      upper="2.2689280275926285"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="left_gear_link">
+    <inertial>
+      <origin
+        xyz="0.00173202665550959 0.0010401447452989 -0.0157285877417442"
+        rpy="0 0 0" />
+      <mass
+        value="0.00440214385375005" />
+      <inertia
+        ixx="3.54958340979828E-07"
+        ixy="-1.03539021241121E-07"
+        ixz="1.45367547115379E-08"
+        iyy="4.31532581873505E-07"
+        iyz="1.04315709445713E-08"
+        izz="5.16608277909124E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ahman_robot_description/meshes/left_gear_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ahman_robot_description/meshes/left_gear_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_gear_joint"
+    type="revolute">
+    <origin
+      xyz="0.025 0.015 0.0125"
+      rpy="0 0 0" />
+    <parent
+      link="knuckle_link" />
+    <child
+      link="left_gear_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-0.51"
+      upper="0.90"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="left_finger_tip_link">
+    <inertial>
+      <origin
+        xyz="0.0441131161508655 -0.0111946654022016 9.65549627929274E-06"
+        rpy="0 0 0" />
+      <mass
+        value="0.00995624544719296" />
+      <inertia
+        ixx="5.59096232163477E-07"
+        ixy="4.76644387717978E-07"
+        ixz="2.9656093283699E-09"
+        iyy="2.68387876530051E-06"
+        iyz="-6.68087296275808E-10"
+        izz="2.53748010084301E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ahman_robot_description/meshes/left_finger_tip_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.698039215686274 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ahman_robot_description/meshes/left_finger_tip_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_finger_tip_joint"
+    type="continuous">
+    <origin
+      xyz="0.027469 0.019609 -0.0235"
+      rpy="0 0 0" />
+    <parent
+      link="left_gear_link" />
+    <child
+      link="left_finger_tip_link" />
+    <axis
+      xyz="0 0 -1" />
+		<mimic joint="left_gear_joint"/>
+  </joint>
+  <link
+    name="right_gear_link">
+    <inertial>
+      <origin
+        xyz="0.00317775901945931 -0.00195624294520627 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.00239089226491989" />
+      <inertia
+        ixx="1.8389181007704E-07"
+        ixy="1.00121330617587E-07"
+        ixz="-1.13021825928484E-22"
+        iyy="2.58723464874534E-07"
+        iyz="1.29346077240487E-23"
+        izz="4.39028936554194E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ahman_robot_description/meshes/right_gear_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ahman_robot_description/meshes/right_gear_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_gear_joint"
+    type="continuous">
+    <origin
+      xyz="0.025 -0.015 -0.011"
+      rpy="0 0 0" />
+    <parent
+      link="knuckle_link" />
+    <child
+      link="right_gear_link" />
+    <axis
+      xyz="0 0 -1" />
+		<mimic joint="left_gear_joint"/>
+  </joint>
+  <link
+    name="right_finger_tip_link">
+    <inertial>
+      <origin
+        xyz="0.0441131161508605 0.0111946654022214 -0.000509655496279127"
+        rpy="0 0 0" />
+      <mass
+        value="0.00995624544719294" />
+      <inertia
+        ixx="5.59096232163903E-07"
+        ixy="-4.76644387718929E-07"
+        ixz="-2.96560932836692E-09"
+        iyy="2.68387876530007E-06"
+        iyz="-6.68087296276518E-10"
+        izz="2.537480100843E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ahman_robot_description/meshes/right_finger_tip_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.698039215686274 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ahman_robot_description/meshes/right_finger_tip_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_finger_tip_joint"
+    type="continuous">
+    <origin
+      xyz="0.027469 -0.019609 0"
+      rpy="0 0 0" />
+    <parent
+      link="right_gear_link" />
+    <child
+      link="right_finger_tip_link" />
+    <axis
+      xyz="0 0 1" />
+		<mimic joint="left_gear_joint"/>
+  </joint>
+  <link
+    name="left_finger_link">
+    <inertial>
+      <origin
+        xyz="0.0137344597130272 0.0098046030715799 1.11022302462516E-16"
+        rpy="0 0 0" />
+      <mass
+        value="0.000682275993524468" />
+      <inertia
+        ixx="2.72087572377812E-08"
+        ixy="-3.38891767074032E-08"
+        ixz="-5.54949239037448E-23"
+        iyy="5.04888816707687E-08"
+        iyz="-4.168685264938E-23"
+        izz="7.66742249182632E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ahman_robot_description/meshes/left_finger_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ahman_robot_description/meshes/left_finger_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_finger_joint"
+    type="continuous">
+    <origin
+      xyz="0.048 0.0075 -0.011"
+      rpy="0 0 0" />
+    <parent
+      link="knuckle_link" />
+    <child
+      link="left_finger_link" />
+    <axis
+      xyz="0 0 1" />
+		<mimic joint="left_gear_joint"/>
+  </joint>
+  <link
+    name="right_finger_link">
+    <inertial>
+      <origin
+        xyz="0.0137344597130273 -0.00980460307157982 1.11022302462516E-16"
+        rpy="0 0 0" />
+      <mass
+        value="0.000682275993524469" />
+      <inertia
+        ixx="2.72087572377805E-08"
+        ixy="3.3889176707403E-08"
+        ixz="1.86987226295092E-23"
+        iyy="5.04888816707694E-08"
+        iyz="-1.7836171978725E-23"
+        izz="7.66742249182632E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ahman_robot_description/meshes/right_finger_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ahman_robot_description/meshes/right_finger_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_finger_joint"
+    type="continuous">
+    <origin
+      xyz="0.048 -0.0075 -0.011"
+      rpy="0 0 0" />
+    <parent
+      link="knuckle_link" />
+    <child
+      link="right_finger_link" />
+    <axis
+      xyz="0 0 -1" />
+		<mimic joint="left_gear_joint"/>
+  </joint>
+</robot>

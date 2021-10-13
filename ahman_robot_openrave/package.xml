@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ahman_robot_openrave</name>
+  <version>0.0.0</version>
+  <description>The ahman_robot_openrave package</description>
+
+  <maintainer email="redy@todo.todo">redy</maintainer>
+
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>openrave_catkin</build_depend>
+  
+  <build_export_depend>openrave_catkin</build_export_depend>
+  
+  <exec_depend>openrave_catkin</exec_depend>
+	<exec_depend>python-matplotlib</exec_depend>
+
+</package>
