@@ -27,19 +27,19 @@ FINGER_MOTOR = Ax12(FINGER_MOTOR_ID)
 class robot_arm_controller:
   def __init__(self):
     self.link_length = { 
-                        'shoulder'  : 20,
-                        'elbow'     : 50,
-                        'wrist'     : 50,
-                        'knuckle'   : 20,
-                        'finger'    : 10,
-                        'gripper'   : 10
+                        'shoulder'  : 45,
+                        'elbow'     : 211.5,
+                        'wrist'     : 203.2,
+                        'knuckle'   : 95.2,
+                        'finger'    : 46.34,
+                        'gripper'   : 75.66
                         }
                           
     self.angle_limit = { 
-                        'shoulder'  : [-30, 30],
-                        'elbow'     : [-30, 30],
-                        'wrist'     : [-30, 30],
-                        'knuckle'   : [-30, 30],
+                        'shoulder'  : [-120, 120],
+                        'elbow'     : [0, 130],
+                        'wrist'     : [-90, 90],
+                        'knuckle'   : [-130, 130],
                         'finger'    : [-30, 30]            
                         }
 
