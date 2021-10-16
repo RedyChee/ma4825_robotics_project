@@ -94,9 +94,9 @@ class robot_arm_controller:
 
   # def get_knuckle_angle(self):
 
-  # def open_gripper(self):
+  # def open_gripper(self): -50 deg
 
-  # def close_gripper(self):
+  # def close_gripper(self): >1500 load stop
 
   def des_pose_callback(self, data):
     self.des_x, self.des_y, self.des_z = data.position.x, data.position.y, data.position.z
