@@ -43,7 +43,7 @@ class robot_arm_controller:
   def __init__(self):
     self.link_length = { 
                         'shoulder'  : 50,
-                        'elbow'     : 195.0,   #211.5
+                        'elbow'     : 193.0,   #211.5
                         'wrist'     : 203.2,  #203.2
                         'knuckle'   : 95.2,
                         'finger'    : 46.34,
@@ -55,7 +55,7 @@ class robot_arm_controller:
                         'elbow'     : [0, 130],
                         'wrist'     : [-90, 90],
                         'knuckle'   : [-130, 130],
-                        'finger'    : [-50, 40]            
+                        'finger'    : [-60, 40]            
                         }
 
     self.dest_position = np.array([[10, 20, 30],
@@ -75,7 +75,7 @@ class robot_arm_controller:
     self.object_id_sub = rospy.Subscriber("/camera/object_id", Int16, self.object_id_callback)
     self.pick_flag_sub = rospy.Subscriber("/arduino/pick_flag" , Bool, self.des_pick_flag_callback)
     self.des_pose_sub = rospy.Subscriber("/camera/des_pose", Pose, self.des_pose_callback)
-    self.robot_in_operation = rospy.Publisher("/arm/in_operation", Bool, queue_size= 1)
+    self.robot_in_operation_pub = rospy.Publisher("/arm/in_operation", Bool, queue_size= 1)
 
     self.des_x = 0
     self.des_y = 0
@@ -84,6 +84,7 @@ class robot_arm_controller:
     self.des_z_elbow = 0
     self.object_id = 0
     self.pick_flag = False
+    self.robot_in_op_msg = Bool()
 
 
     self.set_angle_limit(SHOULDER_MOTOR, self.angle_limit['shoulder'][0], self.angle_limit['shoulder'][1])
@@ -104,6 +105,13 @@ class robot_arm_controller:
     """Set motor angle"""
     input_analog = angle_in_deg / 150 * 512 + 511 
     motor_object.set_goal_position(int(input_analog))
+
+  def set_torque_limit(self):
+    SHOULDER_MOTOR.set_torque_limit(1023)
+    ELBOW_MOTOR.set_torque_limit(1023)
+    WRIST_MOTOR.set_torque_limit(1023)
+    KNUCKLE_MOTOR.set_torque_limit(1023)
+    FINGER_MOTOR.set_torque_limit(1023)
 
   def homing(self):
     """ sets goal position to home position"""
@@ -149,12 +157,12 @@ class robot_arm_controller:
     return self.des_angle
 
   def open_gripper(self):
-    self.set_position(FINGER_MOTOR, -50)
+    self.set_position(FINGER_MOTOR, -60)
     rospy.sleep(0.1)
 
   def close_gripper(self):
     finger_des_angle = -50
-    while (FINGER_MOTOR.get_load() < 1500):
+    while (FINGER_MOTOR.get_load() < 1900):
       self.set_position(FINGER_MOTOR, finger_des_angle)
       finger_des_angle += 5
       print(FINGER_MOTOR.get_load())
@@ -163,6 +171,8 @@ class robot_arm_controller:
     rospy.sleep(0.1)
 
   def move_robot(self):
+    #Eliminate overload error 
+    self.set_torque_limit()
     self.set_position(SHOULDER_MOTOR, self.get_shoulder_angle())
 
     while(True):
@@ -192,37 +202,52 @@ class robot_arm_controller:
     self.object_id = data
 
   def des_pick_flag_callback(self, data):
-    self.pick_flag = data
+    if data == True:
 
-  def des_pose_callback(self, data):
-    if self.pick_flag:
-      #Pick
-      self.des_x, self.des_y, self.des_z = data.position.x, data.position.y, data.position.z
-      self.des_r = math.sqrt(self.des_x ** 2 + self.des_y ** 2)
-      # self.des_z_elbow = self.des_z - self.link_length["shoulder"] - self.link_length["elbow"] + self.link_length["finger"] + self.link_length["gripper"]
-      self.des_z_elbow = 0
-      self.des_angle = data.orientation.x
-      print("shoulder angle:", self.get_shoulder_angle())
-      print("elbow angle:", self.get_elbow_angle())
-      print("wrist angle:", self.get_wrist_angle())
-      print("knuckle angle:", self.get_knuckle_angle())
+      #Publish robot in operation bool msg
+      self.robot_in_op_msg.data = True
+      self.robot_in_operation_publish(self.robot_in_op_msg)
 
+      #PICK
       self.move_robot()
       self.close_gripper()
 
-      #Place 
-      # self.des_x, self.des_y, self.des_z = self.dest_position[self.object_id][:]
-      # self.des_r = math.sqrt(self.des_x ** 2 + self.des_y ** 2)
-      # self.des_z_elbow = self.des_z - self.link_length["shoulder"] - self.link_length["elbow"] + self.link_length["finger"] + self.link_length["gripper"]
-      # self.des_angle = 0
+      
+      #set placing position parameters
+      self.des_x, self.des_y, self.des_z = self.dest_position[self.object_id][:]
+      self.des_r = math.sqrt(self.des_x ** 2 + self.des_y ** 2)
+      self.des_z_elbow = self.des_z - self.link_length["shoulder"] - self.link_length["elbow"] + 20
+      self.des_angle = 0
 
-      # self.move_robot()
-      # self.open_gripper()
-      #Home
+      #PLACE
+      while(True):
+        if FINGER_MOTOR.is_moving() == 0:
+          self.move_robot()
+          break
+      self.open_gripper()
+
+      #HOME
       while(True):
         if FINGER_MOTOR.is_moving() == 0:
           self.homing()
           break
+
+      #Publish robot in operation bool msg
+      self.robot_in_op_msg.data = False
+      self.robot_in_operation_publish(self.robot_in_op_msg)
+      
+  def des_pose_callback(self, data):
+
+    #set desired position parameters
+    self.des_x, self.des_y, self.des_z = data.position.x, data.position.y, data.position.z
+    self.des_r = math.sqrt(self.des_x ** 2 + self.des_y ** 2)
+    self.des_z_elbow = self.des_z - self.link_length["shoulder"] - self.link_length["elbow"] + 20
+    # self.des_z_elbow = 0
+    self.des_angle = data.orientation.x
+    print("shoulder angle:", self.get_shoulder_angle())
+    print("elbow angle:", self.get_elbow_angle())
+    print("wrist angle:", self.get_wrist_angle())
+    print("knuckle angle:", self.get_knuckle_angle())
 
     
 
