@@ -93,6 +93,8 @@ void cameraDetectCB(const std_msgs::Bool& msg){
   if (msg.data == true && convenyor_status == 1){
     convenyor_status = 0;
     run_motor();
+    pick_flag_msg.data = true;
+    pick_flag_pub.publish(&pick_flag_msg);
   }
 }
 

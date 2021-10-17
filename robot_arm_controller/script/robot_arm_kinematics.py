@@ -73,7 +73,7 @@ class robot_arm_controller:
     #                         }
     
     self.object_id_sub = rospy.Subscriber("/camera/object_id", Int16, self.object_id_callback)
-    self.pick_flag_sub = rospy.Subscriber("/arduino/pick_flag" , Bool, self.des_pick_flag_callback)
+    self.pick_flag_sub = rospy.Subscriber("/arduino/pick_flag" , Bool, self.pick_flag_callback)
     self.des_pose_sub = rospy.Subscriber("/camera/des_pose", Pose, self.des_pose_callback)
     self.robot_in_operation_pub = rospy.Publisher("/arm/in_operation", Bool, queue_size= 1)
 
@@ -201,12 +201,14 @@ class robot_arm_controller:
   def object_id_callback(self, data):
     self.object_id = data
 
-  def des_pick_flag_callback(self, data):
-    if data == True:
-
+  def pick_flag_callback(self, data):
+    print("Pick flag function callback")
+    print(data)
+    if data.data == True:
+      print("Enter if statement")
       #Publish robot in operation bool msg
       self.robot_in_op_msg.data = True
-      self.robot_in_operation_publish(self.robot_in_op_msg)
+      self.robot_in_operation_pub.publish(self.robot_in_op_msg)
 
       #PICK
       self.move_robot()
@@ -234,7 +236,7 @@ class robot_arm_controller:
 
       #Publish robot in operation bool msg
       self.robot_in_op_msg.data = False
-      self.robot_in_operation_publish(self.robot_in_op_msg)
+      self.robot_in_operation_pub.publish(self.robot_in_op_msg)
       
   def des_pose_callback(self, data):
 
