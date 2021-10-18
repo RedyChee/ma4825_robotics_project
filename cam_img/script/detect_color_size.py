@@ -97,7 +97,11 @@ class ImageProcessing:
 			mask_low = cv2.inRange(hsv, lower_red1, lower_red2)
 			mask_high = cv2.inRange(hsv, higher_red1, higher_red2)
 			mask = cv2.bitwise_or(mask_low, mask_high)
-		ext_col = cv2.bitwise_and(self.cv_copy, self.cv_copy, mask=mask)
+#		elif colour == "black":
+#			lower_gray = np.array([0, 5, 50], np.uint8)
+#			upper_gray = np.array([179, 50, 255], np.uint8)
+#			mask = cv2.inRange(hsv, lower_gray, upper_gray)
+#		ext_col = cv2.bitwise_and(self.cv_copy, self.cv_copy, mask=mask)
 		return mask
 	
 	def check_colour(self, colour, mask):

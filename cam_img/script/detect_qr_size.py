@@ -10,7 +10,7 @@ from geometry_msgs.msg import Pose
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 
-MIN_MATCH_COUNT = 180
+MIN_MATCH_COUNT = 30 # 90, 180
 
 class ImageProcessing:
 	def __init__(self):
@@ -18,6 +18,7 @@ class ImageProcessing:
 		self.img_sub = rospy.Subscriber('/usb_cam/image_raw', Image, self.img_callback, queue_size = 1)
 		self.match_pub = rospy.Publisher('/match_img', Image, queue_size = 1)
 		self.roi_pub = rospy.Publisher('roi_img', Image, queue_size =1)
+#		self.filtered_roi_pub = rospy.Publisher('filtered_roi_img', Image, queue_size =1)
 		self.img_pub = rospy.Publisher('/proc_img', Image, queue_size = 1)
 		self.mask_pub = rospy.Publisher('/mask_img', Image, queue_size = 1)
 		self.cam_detect_flag_pub = rospy.Publisher('/camera/detect_flag', Bool, queue_size = 1)
@@ -45,7 +46,7 @@ class ImageProcessing:
 		mono_img = cv2.cvtColor(self.cv_copy, cv2.COLOR_BGR2GRAY)
 		blur = cv2.GaussianBlur(mono_img,(5,5),0)
 		edges = cv2.Canny(blur,100,200)
-		kernel = np.ones((10,10),np.uint8)
+		kernel = np.ones((40,40),np.uint8)  #(10,10)
 		dilation = cv2.dilate(edges,kernel,iterations = 1)
 		contours , _= cv2.findContours(dilation, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 		qr_box = []
@@ -57,7 +58,8 @@ class ImageProcessing:
 			rect_area = np.array([width, height])
 			area = cv2.contourArea(cnt)
 			extent = area/(rect_area[0]*rect_area[1])
-			if (extent > 0.8) and (10000 < area < 30000):
+			print(area)
+			if (extent > 0.8) and (40000 < area < 160000):  #(extent > 0.8) and (10000 < area < 30000)
 				qr_box.append((int(center[0]-rect_area[0]/2), int(center[1]-rect_area[1]/2), int(center[0]+rect_area[0]/2), int(center[1]+rect_area[1]/2)))
 				box = cv2.boxPoints(rect)
 				box = np.int0(box)
@@ -65,7 +67,10 @@ class ImageProcessing:
 #			cv2.circle(self.cv_copy,c,5,(0,255,0),-1)
 		print(qr_box)
 		for xmin, ymin, xmax, ymax in qr_box:
-			roi = self.cv_copy[ymin:ymax, xmin:xmax]
+			self.cv_copy2 = cv_img.copy()
+			roi = self.cv_copy2[ymin:ymax, xmin:xmax]
+#			filtered_roi = self.filter_roi(roi.copy())
+#			self.filtered_roi_pub.publish(self.bridge.cv2_to_imgmsg(filtered_roi, "mono8"))
 			detections = pyzbar.decode(roi, symbols=[pyzbar.ZBarSymbol.QRCODE])
 			print(detections)
 		return dilation, self.cv_copy, roi
@@ -109,12 +114,25 @@ class ImageProcessing:
 				               flags = 2)
 		img3 = cv2.drawMatches(self.cv_copy_match,kp1,train_img,kp2,good,None,**draw_params)
 		return img3
-	
 
+	def filter_roi(self, roi):
+		mono_img = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
+#		kernel = np.ones((3,3),np.uint8)
+#		erosion = cv2.erode(mono_img,kernel,iterations = 1)
+		th2 = cv2.adaptiveThreshold(mono_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,11,0)
+#		kernel = np.array([[1/9, 1/9, 1/9],
+#                      [1/9, -2,1/9],
+#                      [1/9, 1/9, 1/9]])
+#		filter2d = cv2.filter2D(mono_img, -1, kernel)
+#		blur = cv2.GaussianBlur(mono_img,(5,5),0)
+#		laplacian = cv2.Laplacian(blur,cv2.CV_8UC1)
+#		edges = cv2.Canny(blur,100,200)
+		return th2
+	
 def main(args):
 	rospy.init_node("image_processing_node", anonymous=True)
 	ip = ImageProcessing()
 	rospy.spin()
-
+https://www.ntu.edu.sg/?p1=U1820382K~~U1820382K&p2=
 if __name__ == '__main__':
 	main(sys.argv)
