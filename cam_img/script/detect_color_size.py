@@ -158,10 +158,11 @@ class ImageProcessing:
 		if size.size != 0:									# small = [265644.84870666 253994.64077836]
 			length = np.sum(size**2, axis=1)  # big = [571324.12068184 552984.55968933]
 #			print(length.shape)
+			length = length[length > 250000]
 			average_length = np.sum(length)/(length.shape)
-#			print(length)
-#			print(average_length)
-			if 550000 < average_length[0] < 580000:
+			print(length)
+			print(average_length)
+			if 500000 < average_length[0] < 580000:
 				self.size_big = True
 				print("CHUNKKKK")
 			elif 250000 < average_length[0] < 270000:
