@@ -37,6 +37,7 @@ ros::Publisher pick_flag_pub("/arduino/pick_flag", &pick_flag_msg);
 
 // Parameters
 int convenyor_status = 0;
+bool starting = true;
 
 void setup() {
 
@@ -66,10 +67,9 @@ void setup() {
   // turn on motor
   myMotor->run(RELEASE);
 
-
+  delay(1000);
   run_motor();
-  pick_flag_msg.data = true;
-  pick_flag_pub.publish(&pick_flag_msg);
+
 }
 
 void loop() {
@@ -81,7 +81,12 @@ void loop() {
     nh.spinOnce();
   }
   nh.spinOnce();
-  run_motor();
+  if (starting){
+    pick_flag_msg.data = true;
+    pick_flag_pub.publish(&pick_flag_msg);
+    starting = false;
+  }
+  // run_motor();
 }
 
 void run_motor(){
