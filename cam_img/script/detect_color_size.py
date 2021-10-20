@@ -146,8 +146,8 @@ class ImageProcessing:
 		for cnt in contours:
 			rect = cv2.minAreaRect(cnt)
 			[x,y], [width, height], orientation = rect
-#			print([x,y])
-			if (width_img-100 <= [x,y][0] <= width_img+100) and (height_img-100 <= [x,y][1] <= height_img+100):
+			print([x,y])
+			if (width_img-150 <= [x,y][0] <= width_img+150) and (height_img-100 <= [x,y][1] <= height_img+100):
 				size.append([width, height])
 				angle.append(orientation)
 				c = (int(x),int(y))
