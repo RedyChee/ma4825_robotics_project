@@ -133,7 +133,8 @@ class ImageProcessing:
 #		blur = cv2.medianBlur(ext_col,5)
 #		blur = cv2.blur(ext_col,(5,5))
 #		blur = cv2.bilateralFilter(ext_col,5,75,75)
-		width_img, height_img = ext_col[:2]
+		width_img = 1280/2
+		height_img = 720/2
 		blur = cv2.GaussianBlur(ext_col,(5,5),0)
 		edges = cv2.Canny(blur,100,200)
 		kernel = np.ones((5,5),np.uint8)
@@ -145,10 +146,10 @@ class ImageProcessing:
 		for cnt in contours:
 			rect = cv2.minAreaRect(cnt)
 			[x,y], [width, height], orientation = rect
-			if (width_img-20 <= [x,y][0] <= width_img+20) and (height_img-20 <= [x,y][1] <= height_img+20):
+#			print([x,y])
+			if (width_img-100 <= [x,y][0] <= width_img+100) and (height_img-100 <= [x,y][1] <= height_img+100):
 				size.append([width, height])
 				angle.append(orientation)
-				center.append([x, y])
 				c = (int(x),int(y))
 				box = cv2.boxPoints(rect)
 				box = np.int0(box)
@@ -174,6 +175,8 @@ class ImageProcessing:
 		if angle.size != 0:
 			average_angle = np.sum(angle)/(angle.size)
 			self.angle = average_angle
+		elif angle.size == 0:
+			self.angle = 0
 #			print(angle)
 #			print(average_angle)
 		return self.cv_copy		
