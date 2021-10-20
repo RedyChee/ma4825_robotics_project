@@ -47,28 +47,40 @@ class ImageProcessing:
 		self.object_pose = Pose()
 		if self.blue == True and self.size_big == True:
 			self.object_id.data = 0
-			self.detect_flag = True
+			self.detect_flag.data = True
+			self.object_pose.position.x = 266
+			self.object_pose.position.y = 0
+			self.object_pose.position.z = 90
 			self.object_pose.orientation.x = self.angle
 			self.object_id_pub.publish(self.object_id)
 			self.cam_detect_flag_pub.publish(self.detect_flag)
 			self.cam_des_pose_pub.publish(self.object_pose)
 		elif self.blue == True and self.size_big == False:
 			self.object_id.data = 1
-			self.detect_flag = True
+			self.detect_flag.data = True
+			self.object_pose.position.x = 266
+			self.object_pose.position.y = 0
+			self.object_pose.position.z = 90
 			self.object_pose.orientation.x = self.angle
 			self.object_id_pub.publish(self.object_id)
 			self.cam_detect_flag_pub.publish(self.detect_flag)
 			self.cam_des_pose_pub.publish(self.object_pose)
 		elif self.red == True and self.size_big == True:
 			self.object_id.data = 2
-			self.detect_flag = True
+			self.detect_flag.data = True
+			self.object_pose.position.x = 266
+			self.object_pose.position.y = 0
+			self.object_pose.position.z = 90
 			self.object_pose.orientation.x = self.angle
 			self.object_id_pub.publish(self.object_id)
 			self.cam_detect_flag_pub.publish(self.detect_flag)
 			self.cam_des_pose_pub.publish(self.object_pose)
 		elif self.red == True and self.size_big == False:
 			self.object_id.data = 3
-			self.detect_flag = True
+			self.detect_flag.data = True
+			self.object_pose.position.x = 266
+			self.object_pose.position.y = 0	
+			self.object_pose.position.z = 90
 			self.object_pose.orientation.x = self.angle
 			self.object_id_pub.publish(self.object_id)
 			self.cam_detect_flag_pub.publish(self.detect_flag)
