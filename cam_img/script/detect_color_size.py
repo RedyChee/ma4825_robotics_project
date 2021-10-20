@@ -147,7 +147,7 @@ class ImageProcessing:
 			rect = cv2.minAreaRect(cnt)
 			[x,y], [width, height], orientation = rect
 #			print([x,y])
-			if (width_img-100 <= [x,y][0] <= width_img+100) and (height_img-100 <= [x,y][1] <= height_img+100):
+			if (width_img-200 <= [x,y][0] <= width_img+200) and (height_img-200 <= [x,y][1] <= height_img+200):
 				size.append([width, height])
 				angle.append(orientation)
 				c = (int(x),int(y))

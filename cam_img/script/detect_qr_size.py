@@ -3,6 +3,7 @@
 import sys
 import rospy
 import cv2
+import rospkg
 import numpy as np
 import pyzbar.pyzbar as pyzbar
 from std_msgs.msg import Bool, Int16
@@ -11,6 +12,8 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 
 MIN_MATCH_COUNT = 30 # 90, 180
+rospack = rospkg.RosPack()
+package_path = rospack.get_path('cam_img')
 
 class ImageProcessing:
 	def __init__(self):
@@ -34,10 +37,23 @@ class ImageProcessing:
 		match_img = self.qr_match(cv_img)
 		self.match_pub.publish(self.bridge.cv2_to_imgmsg(match_img, "bgr8"))
 		if self.match:
-			mask, qr, roi = self.find_qr(cv_img)
+			mask, qr, roi, object_data = self.find_qr(cv_img)
 			self.roi_pub.publish(self.bridge.cv2_to_imgmsg(roi, "bgr8"))
 			self.mask_pub.publish(self.bridge.cv2_to_imgmsg(mask, "mono8"))
 			self.img_pub.publish(self.bridge.cv2_to_imgmsg(qr, "bgr8"))
+			data = Int16()
+			if object_data == 0:
+				data.data = object_data
+				self.object_id_pub.publish(data)
+			elif object_data == 1:
+				data.data = object_data
+				self.object_id_pub.publish(data)
+			elif object_data == 2:
+				data.data = object_data
+				self.object_id_pub.publish(data)
+			elif object_data == 3:
+				data.data = object_data
+				self.object_id_pub.publish(data)
 		else:
 			print("No QR code match!")
 
@@ -72,12 +88,12 @@ class ImageProcessing:
 #			filtered_roi = self.filter_roi(roi.copy())
 #			self.filtered_roi_pub.publish(self.bridge.cv2_to_imgmsg(filtered_roi, "mono8"))
 			detections = pyzbar.decode(roi, symbols=[pyzbar.ZBarSymbol.QRCODE])
-			print(detections)
-		return dilation, self.cv_copy, roi
+			object_data = self.decode(detections)
+		return dilation, self.cv_copy, roi, object_data
 
 	def qr_match(self, cv_img):
 		self.cv_copy_match = cv_img.copy()
-		train_img = cv2.imread('/home/redy/ma4825_ws/src/cam_img/pic/object_data.png', 0)
+		train_img = cv2.imread(package_path+'/pic/object0.png', 0)
 		sift = cv2.SIFT_create()
 		# find the keypoints and descriptors with SIFT
 		kp1, des1 = sift.detectAndCompute(self.cv_copy_match,None)
@@ -114,6 +130,13 @@ class ImageProcessing:
 				               flags = 2)
 		img3 = cv2.drawMatches(self.cv_copy_match,kp1,train_img,kp2,good,None,**draw_params)
 		return img3
+	
+	def decode(self, detections):
+		print(detections)
+		with open(detections[0].data)	as input_file:
+			for line in input_file:
+				data = int(line)
+		return data
 
 	def filter_roi(self, roi):
 		mono_img = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
