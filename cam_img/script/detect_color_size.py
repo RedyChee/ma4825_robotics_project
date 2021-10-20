@@ -133,6 +133,7 @@ class ImageProcessing:
 #		blur = cv2.medianBlur(ext_col,5)
 #		blur = cv2.blur(ext_col,(5,5))
 #		blur = cv2.bilateralFilter(ext_col,5,75,75)
+		width_img, height_img = ext_col[:2]
 		blur = cv2.GaussianBlur(ext_col,(5,5),0)
 		edges = cv2.Canny(blur,100,200)
 		kernel = np.ones((5,5),np.uint8)
@@ -143,20 +144,22 @@ class ImageProcessing:
 #		print(np.array(contours).shape)
 		for cnt in contours:
 			rect = cv2.minAreaRect(cnt)
-			(x,y), [width, height], orientation = rect
-			size.append([width, height])
-			angle.append(orientation)
-			c = (int(x),int(y))
-			box = cv2.boxPoints(rect)
-			box = np.int0(box)
-			cv2.drawContours(self.cv_copy,[box],0,(0,255,0),2)
-			cv2.circle(self.cv_copy,c,5,(0,255,0),-1)
+			[x,y], [width, height], orientation = rect
+			if (width_img-20 <= [x,y][0] <= width_img+20) and (height_img-20 <= [x,y][1] <= height_img+20):
+				size.append([width, height])
+				angle.append(orientation)
+				center.append([x, y])
+				c = (int(x),int(y))
+				box = cv2.boxPoints(rect)
+				box = np.int0(box)
+				cv2.drawContours(self.cv_copy,[box],0,(0,255,0),2)
+				cv2.circle(self.cv_copy,c,5,(0,255,0),-1)
 		size = np.array(size)
 		angle = np.array(angle)
 #		print(size)
 #		print("size array shape = ", size.shape) 
-		if size.size != 0:									# small = [265644.84870666 253994.64077836]
-			length = np.sum(size**2, axis=1)  # big = [571324.12068184 552984.55968933]
+		if size.size != 0:									
+			length = np.sum(size**2, axis=1)  # small = [265644.84870666 253994.64077836] # big = [571324.12068184 552984.55968933]
 #			print(length.shape)
 			length = length[length > 250000]
 			average_length = np.sum(length)/(length.shape)
