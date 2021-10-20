@@ -37,6 +37,7 @@ ros::Publisher pick_flag_pub("/arduino/pick_flag", &pick_flag_msg);
 
 // Parameters
 int convenyor_status = 0;
+bool starting = true;
 
 void setup() {
 
@@ -66,41 +67,46 @@ void setup() {
   // turn on motor
   myMotor->run(RELEASE);
 
-
+  delay(1000);
   run_motor();
-  convenyor_status = 1;
+
 }
 
 void loop() {
   //wait until you are actually connected
+
   while (!nh.connected())
   {
     nh.logwarn("Arduino ROS Node not connected");
     nh.spinOnce();
   }
   nh.spinOnce();
+  if (starting){
+    pick_flag_msg.data = true;
+    pick_flag_pub.publish(&pick_flag_msg);
+    starting = false;
+  }
+  // run_motor();
 }
 
 void run_motor(){
-  nh.loginfo("tick");
+  nh.logwarn("tick");
   myMotor->run(FORWARD);
-  myMotor->setSpeed(52);
-  delay(1000);
+  myMotor->setSpeed(45);
+  delay(1900);
   myMotor->setSpeed(0); 
 }
 
 void cameraDetectCB(const std_msgs::Bool& msg){
   if (msg.data == true && convenyor_status == 1){
     convenyor_status = 0;
-    run_motor();
-    pick_flag_msg.data = true;
-    pick_flag_pub.publish(&pick_flag_msg);
   }
 }
 
 void robotInOperationCB(const std_msgs::Bool& msg){
-  if (msg.data == false && convenyor_status == 0){
-    convenyor_status = 1;
+  if (msg.data == false){
     run_motor();
+    pick_flag_msg.data = true;
+    pick_flag_pub.publish(&pick_flag_msg);
   }
 }

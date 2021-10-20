@@ -47,28 +47,40 @@ class ImageProcessing:
 		self.object_pose = Pose()
 		if self.blue == True and self.size_big == True:
 			self.object_id.data = 0
-			self.detect_flag = True
+			self.detect_flag.data = True
+			self.object_pose.position.x = 266
+			self.object_pose.position.y = 0
+			self.object_pose.position.z = 90
 			self.object_pose.orientation.x = self.angle
 			self.object_id_pub.publish(self.object_id)
 			self.cam_detect_flag_pub.publish(self.detect_flag)
 			self.cam_des_pose_pub.publish(self.object_pose)
 		elif self.blue == True and self.size_big == False:
 			self.object_id.data = 1
-			self.detect_flag = True
+			self.detect_flag.data = True
+			self.object_pose.position.x = 266
+			self.object_pose.position.y = 0
+			self.object_pose.position.z = 90
 			self.object_pose.orientation.x = self.angle
 			self.object_id_pub.publish(self.object_id)
 			self.cam_detect_flag_pub.publish(self.detect_flag)
 			self.cam_des_pose_pub.publish(self.object_pose)
 		elif self.red == True and self.size_big == True:
 			self.object_id.data = 2
-			self.detect_flag = True
+			self.detect_flag.data = True
+			self.object_pose.position.x = 266
+			self.object_pose.position.y = 0
+			self.object_pose.position.z = 90
 			self.object_pose.orientation.x = self.angle
 			self.object_id_pub.publish(self.object_id)
 			self.cam_detect_flag_pub.publish(self.detect_flag)
 			self.cam_des_pose_pub.publish(self.object_pose)
 		elif self.red == True and self.size_big == False:
 			self.object_id.data = 3
-			self.detect_flag = True
+			self.detect_flag.data = True
+			self.object_pose.position.x = 266
+			self.object_pose.position.y = 0	
+			self.object_pose.position.z = 90
 			self.object_pose.orientation.x = self.angle
 			self.object_id_pub.publish(self.object_id)
 			self.cam_detect_flag_pub.publish(self.detect_flag)
@@ -146,8 +158,8 @@ class ImageProcessing:
 		for cnt in contours:
 			rect = cv2.minAreaRect(cnt)
 			[x,y], [width, height], orientation = rect
-#			print([x,y])
-			if (width_img-200 <= [x,y][0] <= width_img+200) and (height_img-200 <= [x,y][1] <= height_img+200):
+			print([x,y])
+			if (width_img-150 <= [x,y][0] <= width_img+150) and (height_img-100 <= [x,y][1] <= height_img+100):
 				size.append([width, height])
 				angle.append(orientation)
 				c = (int(x),int(y))

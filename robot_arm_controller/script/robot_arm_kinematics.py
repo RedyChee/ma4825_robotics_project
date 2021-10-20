@@ -58,23 +58,15 @@ class robot_arm_controller:
                         'finger'    : [-60, 40]            
                         }
 
-    self.dest_position = np.array([[10, 20, 30],
+    self.dest_position = np.array([[120, 200, 110],
                                   [20, 20, 30],
                                   [20, 20, 20],
                                   [30, 30, 30]])
-
-    # self.joint_positions = {     
-    #                         'origin'    : vector(0, 0, 0),
-    #                         'shoulder'  : vector(),
-    #                         'elbow'     : vector(),  
-    #                         'wrist'     : vector(),
-    #                         'kunckle'   : vector(),
-    #                         'finger'    : vector()
-    #                         }
     
     self.object_id_sub = rospy.Subscriber("/camera/object_id", Int16, self.object_id_callback)
     self.pick_flag_sub = rospy.Subscriber("/arduino/pick_flag" , Bool, self.pick_flag_callback)
     self.des_pose_sub = rospy.Subscriber("/camera/des_pose", Pose, self.des_pose_callback)
+    self.detect_flag_sub = rospy.Subscriber("/camera/detect_flag", Bool, self.detect_flag_callback)
     self.robot_in_operation_pub = rospy.Publisher("/arm/in_operation", Bool, queue_size= 1)
 
     self.des_x = 0
@@ -83,6 +75,7 @@ class robot_arm_controller:
     self.des_r = 0
     self.des_z_elbow = 0
     self.object_id = 0
+    self.detect_flag = False
     self.pick_flag = False
     self.robot_in_op_msg = Bool()
 
@@ -115,6 +108,7 @@ class robot_arm_controller:
 
   def homing(self):
     """ sets goal position to home position"""
+    self.set_torque_limit()
     self.set_position(SHOULDER_MOTOR, 0)   #TODO: redefine home position
     self.set_position(ELBOW_MOTOR, 0)
     self.set_position(WRIST_MOTOR, 0)
@@ -199,12 +193,15 @@ class robot_arm_controller:
         break
 
   def object_id_callback(self, data):
-    self.object_id = data
+    self.object_id = data.data
+
+  def detect_flag_callback(self, data):
+    self.detect_flag = data.data
 
   def pick_flag_callback(self, data):
     print("Pick flag function callback")
     print(data)
-    if data.data == True:
+    if data.data == True and self.detect_flag == True:
       print("Enter if statement")
       #Publish robot in operation bool msg
       self.robot_in_op_msg.data = True
@@ -214,6 +211,14 @@ class robot_arm_controller:
       self.move_robot()
       self.close_gripper()
 
+      #LIFT UP
+      self.des_z_elbow += 100
+      self.des_x -= 50
+      while(True):
+        if FINGER_MOTOR.is_moving() == 0:
+          self.move_robot()
+          break
+
       
       #set placing position parameters
       self.des_x, self.des_y, self.des_z = self.dest_position[self.object_id][:]
@@ -222,12 +227,14 @@ class robot_arm_controller:
       self.des_angle = 0
 
       #PLACE
+      rospy.sleep(1.)
       while(True):
         if FINGER_MOTOR.is_moving() == 0:
           self.move_robot()
           break
-      self.open_gripper()
+      self.open_gripper()   #TODO: Need to put some delay
 
+  
       #HOME
       while(True):
         if FINGER_MOTOR.is_moving() == 0:
@@ -237,6 +244,9 @@ class robot_arm_controller:
       #Publish robot in operation bool msg
       self.robot_in_op_msg.data = False
       self.robot_in_operation_pub.publish(self.robot_in_op_msg)
+
+      #Reset detect flag
+      self.detect_flag = False
       
   def des_pose_callback(self, data):
 
