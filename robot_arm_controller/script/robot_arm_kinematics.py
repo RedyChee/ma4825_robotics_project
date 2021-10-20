@@ -226,7 +226,7 @@ class robot_arm_controller:
         if FINGER_MOTOR.is_moving() == 0:
           self.move_robot()
           break
-      self.open_gripper()
+      self.open_gripper()   #TODO: Need to put some delay
 
       #HOME
       while(True):
