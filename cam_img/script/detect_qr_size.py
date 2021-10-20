@@ -77,7 +77,7 @@ class ImageProcessing:
 
 	def qr_match(self, cv_img):
 		self.cv_copy_match = cv_img.copy()
-		train_img = cv2.imread('/home/redy/ma4825_ws/src/cam_img/pic/qr.png', 0)
+		train_img = cv2.imread('/home/redy/ma4825_ws/src/cam_img/pic/object_data.png', 0)
 		sift = cv2.SIFT_create()
 		# find the keypoints and descriptors with SIFT
 		kp1, des1 = sift.detectAndCompute(self.cv_copy_match,None)
@@ -104,7 +104,7 @@ class ImageProcessing:
 				self.match = True
 				print("Match!")
 		else:
-				print( "Not enough matches are found - {}/{}".format(len(good), MIN_MATCH_COUNT) )
+				print("Not enough matches are found - {}/{}".format(len(good), MIN_MATCH_COUNT))
 				matchesMask = None
 				self.match = False
 				
@@ -133,6 +133,6 @@ def main(args):
 	rospy.init_node("image_processing_node", anonymous=True)
 	ip = ImageProcessing()
 	rospy.spin()
-https://www.ntu.edu.sg/?p1=U1820382K~~U1820382K&p2=
+
 if __name__ == '__main__':
 	main(sys.argv)
