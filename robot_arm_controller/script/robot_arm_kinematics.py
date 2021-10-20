@@ -62,15 +62,6 @@ class robot_arm_controller:
                                   [20, 20, 30],
                                   [20, 20, 20],
                                   [30, 30, 30]])
-
-    # self.joint_positions = {     
-    #                         'origin'    : vector(0, 0, 0),
-    #                         'shoulder'  : vector(),
-    #                         'elbow'     : vector(),  
-    #                         'wrist'     : vector(),
-    #                         'kunckle'   : vector(),
-    #                         'finger'    : vector()
-    #                         }
     
     self.object_id_sub = rospy.Subscriber("/camera/object_id", Int16, self.object_id_callback)
     self.pick_flag_sub = rospy.Subscriber("/arduino/pick_flag" , Bool, self.pick_flag_callback)
@@ -202,11 +193,10 @@ class robot_arm_controller:
         break
 
   def object_id_callback(self, data):
-    self.object_id = data
+    self.object_id = data.data
 
   def detect_flag_callback(self, data):
-    self.detect_flag = data
-
+    self.detect_flag = data.data
 
   def pick_flag_callback(self, data):
     print("Pick flag function callback")
