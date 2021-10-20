@@ -1,0 +1,1 @@
+[[object_id = 0, size = 4cm, colour = blue], [object_id = 1, size = 3cm, colour = blue], [object_id = 2, size = 4cm, colour = red], [object_id = 3, size = 3cm, colour = red]]
