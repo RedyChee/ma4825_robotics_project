@@ -4,6 +4,7 @@ import sys
 import rospy
 import cv2
 import rospkg
+import os
 import numpy as np
 import pyzbar.pyzbar as pyzbar
 from std_msgs.msg import Bool, Int16
@@ -14,11 +15,16 @@ from cv_bridge import CvBridge, CvBridgeError
 MIN_MATCH_COUNT = 30 # 90, 180
 rospack = rospkg.RosPack()
 package_path = rospack.get_path('cam_img')
+directory = package_path + '/pic'
 
 class ImageProcessing:
 	def __init__(self):
 		self.bridge = CvBridge()
 		self.img_sub = rospy.Subscriber('/usb_cam/image_raw', Image, self.img_callback, queue_size = 1)
+		self.match_pub = rospy.Publisher('/match_img', Image, queue_size = 1)
+		self.match0_pub = rospy.Publisher('/match0_img', Image, queue_size = 1)
+		self.match_pub = rospy.Publisher('/match_img', Image, queue_size = 1)
+		self.match_pub = rospy.Publisher('/match_img', Image, queue_size = 1)
 		self.match_pub = rospy.Publisher('/match_img', Image, queue_size = 1)
 		self.roi_pub = rospy.Publisher('roi_img', Image, queue_size =1)
 #		self.filtered_roi_pub = rospy.Publisher('filtered_roi_img', Image, queue_size =1)
@@ -34,8 +40,15 @@ class ImageProcessing:
 			cv_img = self.bridge.imgmsg_to_cv2(img, "bgr8")
 		except CvBridgeError as e:
 			print(e)
-		match_img = self.qr_match(cv_img)
+		match_img = self.loop_qr_match(cv_img)
 		self.match_pub.publish(self.bridge.cv2_to_imgmsg(match_img, "bgr8"))
+#		for file in os.listdir(directory):
+#			filename = os.fsdecode(file)
+#			if filename.endswith(".png"):
+#				print(os.path.join(directory, filename))
+#				continue
+#			else:
+#				continue
 		if self.match:
 			mask, qr, roi, object_data = self.find_qr(cv_img)
 			self.roi_pub.publish(self.bridge.cv2_to_imgmsg(roi, "bgr8"))
@@ -91,9 +104,21 @@ class ImageProcessing:
 			object_data = self.decode(detections)
 		return dilation, self.cv_copy, roi, object_data
 
-	def qr_match(self, cv_img):
+	def loop_qr_match(self, cv_img):
+		for file in os.listdir(directory):
+			filename = os.fsdecode(file)
+			if filename.endswith(".png"):
+				train_dir = os.path.join(directory, filename)
+				train_img = cv2.imread(train_dir, 0)
+				match_img = self.qr_match(cv_img, train_img)
+				continue
+			else:
+				continue
+		return match_img	
+
+	def qr_match(self, cv_img, train_img):
 		self.cv_copy_match = cv_img.copy()
-		train_img = cv2.imread(package_path+'/pic/object0.png', 0)
+#		train_img = cv2.imread(package_path+'/pic/object0.png', 0)
 		sift = cv2.SIFT_create()
 		# find the keypoints and descriptors with SIFT
 		kp1, des1 = sift.detectAndCompute(self.cv_copy_match,None)
