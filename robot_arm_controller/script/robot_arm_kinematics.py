@@ -38,6 +38,8 @@ WRIST_MOTOR.set_moving_speed(120)
 KNUCKLE_MOTOR.set_moving_speed(150)
 FINGER_MOTOR.set_moving_speed(50)
 
+rospy.sleep(0.1)
+
 # Fixed variables in mm
 class robot_arm_controller:
   def __init__(self):
@@ -55,13 +57,13 @@ class robot_arm_controller:
                         'elbow'     : [0, 130],
                         'wrist'     : [-90, 90],
                         'knuckle'   : [-130, 130],
-                        'finger'    : [-60, 40]            
+                        'finger'    : [-60, 60]            
                         }
 
-    self.dest_position = np.array([[120, 200, 110],
-                                  [20, 20, 30],
-                                  [20, 20, 20],
-                                  [30, 30, 30]])
+    self.dest_position = np.array([[130, 240, 130],
+                                  [70, 270, 140],
+                                  [130, -240, 130],
+                                  [70, -270, 140]])
     
     self.object_id_sub = rospy.Subscriber("/camera/object_id", Int16, self.object_id_callback)
     self.pick_flag_sub = rospy.Subscriber("/arduino/pick_flag" , Bool, self.pick_flag_callback)
@@ -157,10 +159,11 @@ class robot_arm_controller:
   def close_gripper(self):
     finger_des_angle = -50
     while (FINGER_MOTOR.get_load() < 1900):
+      rospy.sleep(0.1)
       self.set_position(FINGER_MOTOR, finger_des_angle)
       finger_des_angle += 5
-      print(FINGER_MOTOR.get_load())
-      if finger_des_angle >= 40:
+      # print(FINGER_MOTOR.get_load())
+      if finger_des_angle >= 60:
         break
     rospy.sleep(0.1)
 
@@ -170,7 +173,7 @@ class robot_arm_controller:
     self.set_position(SHOULDER_MOTOR, self.get_shoulder_angle())
 
     while(True):
-      rospy.sleep(0.01)
+      rospy.sleep(0.1)
       if SHOULDER_MOTOR.is_moving() == 0:
         self.set_position(KNUCKLE_MOTOR, self.get_knuckle_angle())
         break
@@ -212,9 +215,10 @@ class robot_arm_controller:
       self.close_gripper()
 
       #LIFT UP
-      self.des_z_elbow += 100
-      self.des_x -= 50
+      self.des_z_elbow += 55
+      self.des_x -= 15
       while(True):
+        rospy.sleep(0.1)
         if FINGER_MOTOR.is_moving() == 0:
           self.move_robot()
           break
@@ -225,18 +229,21 @@ class robot_arm_controller:
       self.des_r = math.sqrt(self.des_x ** 2 + self.des_y ** 2)
       self.des_z_elbow = self.des_z - self.link_length["shoulder"] - self.link_length["elbow"] + 20
       self.des_angle = 0
+      print(self.des_x, self.des_y, self.des_z)
 
       #PLACE
       rospy.sleep(1.)
       while(True):
+        rospy.sleep(0.1)
         if FINGER_MOTOR.is_moving() == 0:
           self.move_robot()
           break
       self.open_gripper()   #TODO: Need to put some delay
 
-  
+      rospy.sleep(1)
       #HOME
       while(True):
+        rospy.sleep(0.1)
         if FINGER_MOTOR.is_moving() == 0:
           self.homing()
           break
