@@ -23,9 +23,9 @@ class ImageProcessing:
 		self.img_sub = rospy.Subscriber('/usb_cam/image_raw', Image, self.img_callback, queue_size = 1)
 		self.match_pub = rospy.Publisher('/match_img', Image, queue_size = 1)
 		self.match0_pub = rospy.Publisher('/match0_img', Image, queue_size = 1)
-		self.match_pub = rospy.Publisher('/match_img', Image, queue_size = 1)
-		self.match_pub = rospy.Publisher('/match_img', Image, queue_size = 1)
-		self.match_pub = rospy.Publisher('/match_img', Image, queue_size = 1)
+		self.match1_pub = rospy.Publisher('/match1_img', Image, queue_size = 1)
+		self.match2_pub = rospy.Publisher('/match2_img', Image, queue_size = 1)
+		self.match3_pub = rospy.Publisher('/match3_img', Image, queue_size = 1)
 		self.roi_pub = rospy.Publisher('roi_img', Image, queue_size =1)
 #		self.filtered_roi_pub = rospy.Publisher('filtered_roi_img', Image, queue_size =1)
 		self.img_pub = rospy.Publisher('/proc_img', Image, queue_size = 1)
@@ -41,7 +41,7 @@ class ImageProcessing:
 		except CvBridgeError as e:
 			print(e)
 		match_img = self.loop_qr_match(cv_img)
-		self.match_pub.publish(self.bridge.cv2_to_imgmsg(match_img, "bgr8"))
+#		self.match_pub.publish(self.bridge.cv2_to_imgmsg(match_img, "bgr8"))
 #		for file in os.listdir(directory):
 #			filename = os.fsdecode(file)
 #			if filename.endswith(".png"):
@@ -58,15 +58,19 @@ class ImageProcessing:
 			if object_data == 0:
 				data.data = object_data
 				self.object_id_pub.publish(data)
+				self.match0_pub.publish(self.bridge.cv2_to_imgmsg(match_img, "bgr8"))
 			elif object_data == 1:
 				data.data = object_data
 				self.object_id_pub.publish(data)
+				self.match1_pub.publish(self.bridge.cv2_to_imgmsg(match_img, "bgr8"))
 			elif object_data == 2:
 				data.data = object_data
 				self.object_id_pub.publish(data)
+				self.match2_pub.publish(self.bridge.cv2_to_imgmsg(match_img, "bgr8"))
 			elif object_data == 3:
 				data.data = object_data
 				self.object_id_pub.publish(data)
+				self.match3_pub.publish(self.bridge.cv2_to_imgmsg(match_img, "bgr8"))
 		else:
 			print("No QR code match!")
 
@@ -75,7 +79,7 @@ class ImageProcessing:
 		mono_img = cv2.cvtColor(self.cv_copy, cv2.COLOR_BGR2GRAY)
 		blur = cv2.GaussianBlur(mono_img,(5,5),0)
 		edges = cv2.Canny(blur,100,200)
-		kernel = np.ones((40,40),np.uint8)  #(10,10)
+		kernel = np.ones((60,60),np.uint8)  #(10,10)
 		dilation = cv2.dilate(edges,kernel,iterations = 1)
 		contours , _= cv2.findContours(dilation, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 		qr_box = []
@@ -87,8 +91,9 @@ class ImageProcessing:
 			rect_area = np.array([width, height])
 			area = cv2.contourArea(cnt)
 			extent = area/(rect_area[0]*rect_area[1])
-			print(area)
-			if (extent > 0.8) and (40000 < area < 160000):  #(extent > 0.8) and (10000 < area < 30000)
+			print('extent = ', extent)
+			print('area = ', area)
+			if (extent > np.pi/4) and (40000 < area < 200000):  #(extent > 0.8) and (10000 < area < 30000)
 				qr_box.append((int(center[0]-rect_area[0]/2), int(center[1]-rect_area[1]/2), int(center[0]+rect_area[0]/2), int(center[1]+rect_area[1]/2)))
 				box = cv2.boxPoints(rect)
 				box = np.int0(box)

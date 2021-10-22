@@ -89,20 +89,20 @@ public:
     image_pub_ = it.advertiseCamera("image_raw", 1);
 
     // grab the parameters
-    node_.param("video_device", video_device_name_, std::string("/dev/video0")); ///dev/video4
+    node_.param("video_device", video_device_name_, std::string("/dev/video4")); ///dev/video4
     node_.param("brightness", brightness_, -1); //0-255, -1 "leave alone"
     node_.param("contrast", contrast_, -1); //0-255, -1 "leave alone"
     node_.param("saturation", saturation_, -1); //0-255, -1 "leave alone"
     node_.param("sharpness", sharpness_, -1); //0-255, -1 "leave alone"
     // possible values: mmap, read, userptr
     node_.param("io_method", io_method_name_, std::string("mmap"));
-    node_.param("image_width", image_width_, 1280);
-    node_.param("image_height", image_height_, 720);
-    node_.param("framerate", framerate_, 25);
+    node_.param("image_width", image_width_, 1920);
+    node_.param("image_height", image_height_, 1080);
+    node_.param("framerate", framerate_, 30);
     // possible values: yuyv, uyvy, mjpeg, yuvmono10, rgb24
     node_.param("pixel_format", pixel_format_name_, std::string("mjpeg"));
     // enable/disable autofocus
-    node_.param("autofocus", autofocus_, false);
+    node_.param("autofocus", autofocus_, true);
     node_.param("focus", focus_, -1); //0-255, -1 "leave alone"
     // enable/disable autoexposure
     node_.param("autoexposure", autoexposure_, true);

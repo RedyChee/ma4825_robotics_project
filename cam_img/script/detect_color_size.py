@@ -145,8 +145,8 @@ class ImageProcessing:
 #		blur = cv2.medianBlur(ext_col,5)
 #		blur = cv2.blur(ext_col,(5,5))
 #		blur = cv2.bilateralFilter(ext_col,5,75,75)
-		width_img = 1280/2
-		height_img = 720/2
+		width_img = 1920/2
+		height_img = 1080/2
 		blur = cv2.GaussianBlur(ext_col,(5,5),0)
 		edges = cv2.Canny(blur,100,200)
 		kernel = np.ones((5,5),np.uint8)
@@ -158,8 +158,8 @@ class ImageProcessing:
 		for cnt in contours:
 			rect = cv2.minAreaRect(cnt)
 			[x,y], [width, height], orientation = rect
-			print([x,y])
-			if (width_img-150 <= [x,y][0] <= width_img+150) and (height_img-100 <= [x,y][1] <= height_img+100):
+#			print("x, y = ", [x,y])
+			if (width_img-200 <= [x,y][0] <= width_img+200) and (height_img-200 <= [x,y][1] <= height_img+200):
 				size.append([width, height])
 				angle.append(orientation)
 				c = (int(x),int(y))
@@ -174,14 +174,14 @@ class ImageProcessing:
 		if size.size != 0:									
 			length = np.sum(size**2, axis=1)  # small = [265644.84870666 253994.64077836] # big = [571324.12068184 552984.55968933]
 #			print(length.shape)
+#			print("length = ", length)
 			length = length[length > 250000]
 			average_length = np.sum(length)/(length.shape)
-			print(length)
-			print(average_length)
-			if 500000 < average_length[0] < 580000:
+			print("average length = ", average_length)
+			if 500000 < average_length[0] < 630000:
 				self.size_big = True
 				print("CHUNKKKK")
-			elif 250000 < average_length[0] < 270000:
+			elif 250000 < average_length[0] < 300000:
 				self.size_big = False
 				print("small....")
 		if angle.size != 0:
@@ -191,7 +191,7 @@ class ImageProcessing:
 			self.angle = 0
 #			print(angle)
 #			print(average_angle)
-		return self.cv_copy		
+		return self.cv_copy	
 
 def main(args):
 	rospy.init_node("image_processing_node", anonymous=True)
