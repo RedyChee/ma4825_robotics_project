@@ -40,6 +40,8 @@ int convenyor_status = 0;
 bool starting = true;
 
 void setup() {
+  // set up Serial library at 57600 bps
+  Serial.begin(57600); 
 
   //Init ROS nodehandle
   nh.initNode();
@@ -50,8 +52,7 @@ void setup() {
 
   nh.advertise(pick_flag_pub);
 
-  // set up Serial library at 9600 bps
-  // Serial.begin(9600);           
+          
   nh.loginfo("Adafruit Motorshield v2 - DC Motor test!");
 
   if (!AFMS.begin()) {         // create with the default frequency 1.6KHz
@@ -69,6 +70,7 @@ void setup() {
 
   delay(1000);
   run_motor();
+  convenyor_status = 1;
 
 }
 
@@ -82,9 +84,11 @@ void loop() {
   }
   nh.spinOnce();
   if (starting){
-    pick_flag_msg.data = true;
-    pick_flag_pub.publish(&pick_flag_msg);
+    // pick_flag_msg.data = true;
+    // delay(10);
     starting = false;
+    // nh.logwarn("pick flag published!");
+    // pick_flag_pub.publish(&pick_flag_msg);
   }
   // run_motor();
 }
@@ -92,21 +96,25 @@ void loop() {
 void run_motor(){
   nh.logwarn("tick");
   myMotor->run(FORWARD);
-  myMotor->setSpeed(45);
-  delay(1900);
+  myMotor->setSpeed(35);
+  delay(1225);
   myMotor->setSpeed(0); 
 }
 
 void cameraDetectCB(const std_msgs::Bool& msg){
   if (msg.data == true && convenyor_status == 1){
+    delay(2000);
+    run_motor();
     convenyor_status = 0;
+    pick_flag_msg.data = true;
+    pick_flag_pub.publish(&pick_flag_msg);
   }
 }
 
 void robotInOperationCB(const std_msgs::Bool& msg){
-  if (msg.data == false){
+  if (msg.data == false && convenyor_status == 0){
     run_motor();
-    pick_flag_msg.data = true;
-    pick_flag_pub.publish(&pick_flag_msg);
+    convenyor_status = 1;
+
   }
 }
