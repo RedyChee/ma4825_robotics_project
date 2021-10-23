@@ -212,7 +212,9 @@ class robot_arm_controller:
 
       #PICK
       self.move_robot()
+      # print("start to close gripper")
       self.close_gripper()
+      # print("end closing gripper")
 
       #LIFT UP
       self.des_z_elbow += 55
@@ -232,7 +234,7 @@ class robot_arm_controller:
       print(self.des_x, self.des_y, self.des_z)
 
       #PLACE
-      rospy.sleep(1.)
+      rospy.sleep(1.5)
       while(True):
         rospy.sleep(0.1)
         if FINGER_MOTOR.is_moving() == 0:
@@ -240,7 +242,7 @@ class robot_arm_controller:
           break
       self.open_gripper()   
 
-      rospy.sleep(1)
+      rospy.sleep(1.5)
       #HOME
       while(True):
         rospy.sleep(0.1)

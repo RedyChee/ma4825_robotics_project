@@ -31,9 +31,9 @@ class ImageProcessing:
 		self.check_colour("blue", ext_blue)	
 		ext_red = self.extract_color("red", cv_img)
 		self.check_colour("red", ext_red)
-		print("blue = ", self.blue)
-		print("red = ", self.red)
-		print()
+		# print("blue = ", self.blue)
+		# print("red = ", self.red)
+		# print()
 		if self.blue:
 			filtered_colour = ext_blue		
 		elif self.red:
@@ -41,7 +41,7 @@ class ImageProcessing:
 		else:
 			filtered_colour = cv2.cvtColor(cv_img, cv2.COLOR_BGR2GRAY)
 		proc_img = self.find_size(filtered_colour)
-		print()
+		# print()
 		self.object_id = Int16()
 		self.detect_flag = Bool()
 		self.object_pose = Pose()
@@ -50,7 +50,7 @@ class ImageProcessing:
 			self.detect_flag.data = True
 			self.object_pose.position.x = 266
 			self.object_pose.position.y = 0
-			self.object_pose.position.z = 90
+			self.object_pose.position.z = 92
 			self.object_pose.orientation.x = self.angle
 			self.object_id_pub.publish(self.object_id)
 			self.cam_detect_flag_pub.publish(self.detect_flag)
@@ -60,7 +60,7 @@ class ImageProcessing:
 			self.detect_flag.data = True
 			self.object_pose.position.x = 266
 			self.object_pose.position.y = 0
-			self.object_pose.position.z = 90
+			self.object_pose.position.z = 92
 			self.object_pose.orientation.x = self.angle
 			self.object_id_pub.publish(self.object_id)
 			self.cam_detect_flag_pub.publish(self.detect_flag)
@@ -70,7 +70,7 @@ class ImageProcessing:
 			self.detect_flag.data = True
 			self.object_pose.position.x = 266
 			self.object_pose.position.y = 0
-			self.object_pose.position.z = 90
+			self.object_pose.position.z = 92
 			self.object_pose.orientation.x = self.angle
 			self.object_id_pub.publish(self.object_id)
 			self.cam_detect_flag_pub.publish(self.detect_flag)
@@ -80,7 +80,7 @@ class ImageProcessing:
 			self.detect_flag.data = True
 			self.object_pose.position.x = 266
 			self.object_pose.position.y = 0	
-			self.object_pose.position.z = 90
+			self.object_pose.position.z = 92
 			self.object_pose.orientation.x = self.angle
 			self.object_id_pub.publish(self.object_id)
 			self.cam_detect_flag_pub.publish(self.detect_flag)
@@ -124,10 +124,10 @@ class ImageProcessing:
 #			print("blue average = ", average)
 			if count > 0 and average != 0:
 				self.blue = True
-				print("Blue exist")
+				# print("Blue exist")
 			else:
 				self.blue = False
-				print("Blue does not exist")
+				# print("Blue does not exist")
 		elif colour == "red":
 			count = cv2.countNonZero(mask)
 			average = cv2.mean(mask)[0]
@@ -135,11 +135,11 @@ class ImageProcessing:
 #			print("red average = ", average)
 			if count > 0 and average != 0:
 				self.red = True
-				print("Red exist")
+				# print("Red exist")
 			else:
 				self.red = False
-				print("Red does not exist")
-		print()
+				# print("Red does not exist")
+		# print()
 	
 	def find_size(self, ext_col):
 #		blur = cv2.medianBlur(ext_col,5)
@@ -159,7 +159,7 @@ class ImageProcessing:
 			rect = cv2.minAreaRect(cnt)
 			[x,y], [width, height], orientation = rect
 #			print("x, y = ", [x,y])
-			if (width_img-200 <= [x,y][0] <= width_img+200) and (height_img-200 <= [x,y][1] <= height_img+200):
+			if (width_img-200 <= [x,y][0] <= width_img+200) and (height_img-220 <= [x,y][1] <= height_img+220):
 				size.append([width, height])
 				angle.append(orientation)
 				c = (int(x),int(y))
@@ -167,6 +167,7 @@ class ImageProcessing:
 				box = np.int0(box)
 				cv2.drawContours(self.cv_copy,[box],0,(0,255,0),2)
 				cv2.circle(self.cv_copy,c,5,(0,255,0),-1)
+				rospy.sleep(0.001)
 		size = np.array(size)
 		angle = np.array(angle)
 #		print(size)
@@ -177,13 +178,13 @@ class ImageProcessing:
 #			print("length = ", length)
 			length = length[length > 250000]
 			average_length = np.sum(length)/(length.shape)
-			print("average length = ", average_length)
+			# print("average length = ", average_length)
 			if 500000 < average_length[0] < 630000:
 				self.size_big = True
-				print("CHUNKKKK")
+				# print("CHUNKKKK")
 			elif 250000 < average_length[0] < 300000:
 				self.size_big = False
-				print("small....")
+				# print("small....")
 		if angle.size != 0:
 			average_angle = np.sum(angle)/(angle.size)
 			self.angle = average_angle
@@ -196,7 +197,9 @@ class ImageProcessing:
 def main(args):
 	rospy.init_node("image_processing_node", anonymous=True)
 	ip = ImageProcessing()
+	# rate = rospy.Rate(15) #15hz
 	rospy.spin()
+	# rate.sleep()
 
 if __name__ == '__main__':
 	main(sys.argv)
