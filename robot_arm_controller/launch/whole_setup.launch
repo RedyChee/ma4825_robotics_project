@@ -1,8 +1,8 @@
 <launch>
-    <node pkg = "usb_cam" type ="usb_cam_node" name = "usb_cam" output = "screen" />
-    <node pkg = "cam_img" type ="detect_color_size.py" name = "cam_img" output = "screen" />
+    <node pkg = "usb_cam" type ="usb_cam_node" name = "usb_cam" />
+    <node pkg = "cam_img" type ="detect_color_size.py" name = "cam_img" launch-perfix="taskset -c 0-5" />
     <node pkg = "robot_arm_controller" type ="robot_arm_kinematics.py" name = "robot_arm_controller" output = "screen" />
-    <node pkg="rosserial_python"       type="serial_node.py"      name="serial_node">
+    <node pkg="rosserial_python"       type="serial_node.py"      name="serial_node"  launch-perfix="taskset -c 6-8">
     <param name="port"              type="string"               value="/dev/ttyACM0"/>
     <param name="baud"              type="int"                  value="57600"/>
     </node>
