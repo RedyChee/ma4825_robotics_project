@@ -57,6 +57,8 @@ class ImageProcessing:
 #				continue
 #			else:
 #				continue
+		self.detect_flag = Bool()
+		self.object_pose = Pose()
 		if self.match:
 			mask, qr, roi, object_data = self.find_qr(cv_img)
 			self.roi_pub.publish(self.bridge.cv2_to_imgmsg(roi, "bgr8"))
@@ -66,18 +68,46 @@ class ImageProcessing:
 			if object_data == 0:
 				data.data = object_data
 				self.object_id_pub.publish(data)
+				self.detect_flag.data = True
+				self.object_pose.position.x = 266
+				self.object_pose.position.y = 0
+				self.object_pose.position.z = 92
+				self.object_pose.orientation.x = self.angle
+				self.cam_detect_flag_pub.publish(self.detect_flag)
+				self.cam_des_pose_pub.publish(self.object_pose)
 				self.match0_pub.publish(self.bridge.cv2_to_imgmsg(match_img, "bgr8"))
 			elif object_data == 1:
 				data.data = object_data
 				self.object_id_pub.publish(data)
+				self.detect_flag.data = True
+				self.object_pose.position.x = 266
+				self.object_pose.position.y = 0
+				self.object_pose.position.z = 92
+				self.object_pose.orientation.x = self.angle
+				self.cam_detect_flag_pub.publish(self.detect_flag)
+				self.cam_des_pose_pub.publish(self.object_pose)
 				self.match1_pub.publish(self.bridge.cv2_to_imgmsg(match_img, "bgr8"))
 			elif object_data == 2:
 				data.data = object_data
 				self.object_id_pub.publish(data)
+				self.detect_flag.data = True
+				self.object_pose.position.x = 266
+				self.object_pose.position.y = 0
+				self.object_pose.position.z = 92
+				self.object_pose.orientation.x = self.angle
+				self.cam_detect_flag_pub.publish(self.detect_flag)
+				self.cam_des_pose_pub.publish(self.object_pose)
 				self.match2_pub.publish(self.bridge.cv2_to_imgmsg(match_img, "bgr8"))
 			elif object_data == 3:
 				data.data = object_data
 				self.object_id_pub.publish(data)
+				self.detect_flag.data = True
+				self.object_pose.position.x = 266
+				self.object_pose.position.y = 0
+				self.object_pose.position.z = 92
+				self.object_pose.orientation.x = self.angle
+				self.cam_detect_flag_pub.publish(self.detect_flag)
+				self.cam_des_pose_pub.publish(self.object_pose)
 				self.match3_pub.publish(self.bridge.cv2_to_imgmsg(match_img, "bgr8"))
 		else:
 			print("No QR code match!")
