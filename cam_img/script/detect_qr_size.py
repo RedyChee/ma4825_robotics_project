@@ -27,7 +27,7 @@ class ImageProcessing:
 		self.match2_pub = rospy.Publisher('/match2_img', Image, queue_size = 1)
 		self.match3_pub = rospy.Publisher('/match3_img', Image, queue_size = 1)
 		self.roi_pub = rospy.Publisher('roi_img', Image, queue_size =1)
-#		self.filtered_roi_pub = rospy.Publisher('filtered_roi_img', Image, queue_size =1)
+		self.filtered_roi_pub = rospy.Publisher('filtered_roi_img', Image, queue_size =1)
 		self.img_pub = rospy.Publisher('/proc_img', Image, queue_size = 1)
 		self.mask_pub = rospy.Publisher('/mask_img', Image, queue_size = 1)
 		self.cam_detect_flag_pub = rospy.Publisher('/camera/detect_flag', Bool, queue_size = 1)
@@ -42,6 +42,14 @@ class ImageProcessing:
 			print(e)
 		match_img = self.loop_qr_match(cv_img)
 #		self.match_pub.publish(self.bridge.cv2_to_imgmsg(match_img, "bgr8"))
+#		mask, qr, roi, object_data = self.find_qr(cv_img)
+#		self.roi_pub.publish(self.bridge.cv2_to_imgmsg(roi, "bgr8"))
+#		self.mask_pub.publish(self.bridge.cv2_to_imgmsg(mask, "mono8"))
+#		self.img_pub.publish(self.bridge.cv2_to_imgmsg(qr, "bgr8"))
+#		data = Int16()
+#		data.data = object_data
+#		self.object_id_pub.publish(data)	
+		self.match_pub.publish(self.bridge.cv2_to_imgmsg(match_img, "bgr8"))
 #		for file in os.listdir(directory):
 #			filename = os.fsdecode(file)
 #			if filename.endswith(".png"):
@@ -54,7 +62,7 @@ class ImageProcessing:
 			self.roi_pub.publish(self.bridge.cv2_to_imgmsg(roi, "bgr8"))
 			self.mask_pub.publish(self.bridge.cv2_to_imgmsg(mask, "mono8"))
 			self.img_pub.publish(self.bridge.cv2_to_imgmsg(qr, "bgr8"))
-			data = Int16()
+			data = Int16()		
 			if object_data == 0:
 				data.data = object_data
 				self.object_id_pub.publish(data)
@@ -79,7 +87,7 @@ class ImageProcessing:
 		mono_img = cv2.cvtColor(self.cv_copy, cv2.COLOR_BGR2GRAY)
 		blur = cv2.GaussianBlur(mono_img,(5,5),0)
 		edges = cv2.Canny(blur,100,200)
-		kernel = np.ones((60,60),np.uint8)  #(10,10)
+		kernel = np.ones((20,20),np.uint8)  #(10,10)
 		dilation = cv2.dilate(edges,kernel,iterations = 1)
 		contours , _= cv2.findContours(dilation, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 		qr_box = []
@@ -93,7 +101,7 @@ class ImageProcessing:
 			extent = area/(rect_area[0]*rect_area[1])
 			print('extent = ', extent)
 			print('area = ', area)
-			if (extent > np.pi/4) and (40000 < area < 200000):  #(extent > 0.8) and (10000 < area < 30000)
+			if (extent > np.pi/4) and (100000 < area < 260000):  #(extent > 0.8) and (10000 < area < 30000)
 				qr_box.append((int(center[0]-rect_area[0]/2), int(center[1]-rect_area[1]/2), int(center[0]+rect_area[0]/2), int(center[1]+rect_area[1]/2)))
 				box = cv2.boxPoints(rect)
 				box = np.int0(box)
@@ -163,9 +171,13 @@ class ImageProcessing:
 	
 	def decode(self, detections):
 		print(detections)
-		with open(detections[0].data)	as input_file:
-			for line in input_file:
-				data = int(line)
+		if detections:
+			with open(detections[0].data)	as input_file:
+				for line in input_file:
+					data = int(line)
+		else:
+			data = 4
+			print("No data detected.")
 		return data
 
 	def filter_roi(self, roi):

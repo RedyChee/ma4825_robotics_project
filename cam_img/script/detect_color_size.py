@@ -104,8 +104,8 @@ class ImageProcessing:
 			mask = cv2.inRange(hsv, lower_blue, upper_blue)
 		elif colour == "red":
 			# lower mask (0-5) and upper mask (175-180) of RED
-			lower_red1, lower_red2 = np.array([0,50,20]), np.array([10,255,255])
-			higher_red1, higher_red2 = np.array([170,50,20]), np.array([180,255,255])
+			lower_red1, lower_red2 = np.array([0,70,150]), np.array([10,255,255])
+			higher_red1, higher_red2 = np.array([175,70,150]), np.array([180,255,255])
 			mask_low = cv2.inRange(hsv, lower_red1, lower_red2)
 			mask_high = cv2.inRange(hsv, higher_red1, higher_red2)
 			mask = cv2.bitwise_or(mask_low, mask_high)
