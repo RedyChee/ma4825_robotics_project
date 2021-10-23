@@ -96,14 +96,14 @@ void loop() {
 void run_motor(){
   nh.logwarn("tick");
   myMotor->run(FORWARD);
-  myMotor->setSpeed(35);
-  delay(1225);
+  myMotor->setSpeed(34);
+  delay(1125);
   myMotor->setSpeed(0); 
 }
 
 void cameraDetectCB(const std_msgs::Bool& msg){
   if (msg.data == true && convenyor_status == 1){
-    delay(2000);
+    delay(4000);
     run_motor();
     convenyor_status = 0;
     pick_flag_msg.data = true;
