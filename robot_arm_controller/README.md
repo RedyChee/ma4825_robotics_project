@@ -7,12 +7,21 @@ This package contains program to control robot arm and convenyor belt.
 cd ~/catkin_ws/src/ma4825_robotics_project/DynamixelSDK/python/
  ```
 
- 2. Install Dynamixel SDK library (python version)
+2. Install Dynamixel SDK library (python version)
  ```
  sudo python setup.py install
  ```
 
- ## Quick Start
+3. Install Arduino IDE
+Follow this guide: https://www.arduino.cc/en/Guide/Linux
+
+4. Install rosserial_python
+```
+sudo apt-get install ros-noetic-rosserial-python
+```
+ 
+
+## Quick Start
  1. Check all USB ports is define correctly. (3 USB port i.robot arm, ii.arduino, iii.camera )
  2. Launch the program.
  ```
